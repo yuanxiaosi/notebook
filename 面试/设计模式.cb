@@ -1,0 +1,292 @@
+{}
+// ------------------------------------------------------------------------------------------------------------------------
+  工厂模式
+
+function CreatePerson(name,age,sex) {
+    var obj = new Object();
+    obj.name = name;
+    obj.age = age;
+    obj.sex = sex;
+    obj.sayName = function(){
+        return this.name;
+    }
+    return obj;
+}
+var p1 = new CreatePerson("longen",'28','男');
+var p2 = new CreatePerson("tugenhua",'27','女');
+
+优点：能解决多个相似的问题。
+
+缺点：不能知道对象识别的问题(对象的类型不知道)。
+
+复杂的工厂模式定义是：将其成员对象的实列化推迟到子类中，子类可以重写父类接口方法以便创建的时候指定自己的对象类型。
+
+
+
+// ------------------------------------------------------------------------------------------------------------------------
+  单体模式
+  单体模式的优点是：
+
+可以用来划分命名空间，减少全局变量的数量。
+使用单体模式可以使代码组织的更为一致，使代码容易阅读和维护。
+可以被实例化，且实例化一次。
+
+var Singleton = function(name){
+    this.name = name;
+};
+Singleton.prototype.getName = function(){
+    return this.name;
+}
+// 获取实例对象
+var getInstance = (function() {
+    var instance = null;
+    return function(name) {
+        if(!instance) {
+            instance = new Singleton(name);
+        }
+        return instance;
+    }
+})();
+// 测试单体模式的实例
+var a = getInstance("aa");
+var b = getInstance("bb"); 
+
+
+// ------------------------------------------------------------------------------------------------------------------------
+  模块模式
+  模块模式的优点是：
+模块模式的思路是为单体模式添加私有变量和私有方法能够减少全局变量的使用；如下就是一个模块模式的代码结构：
+var singleMode = (function(){
+    // 创建私有变量
+    var privateNum = 112;
+    // 创建私有函数
+    function privateFunc(){
+        // 实现自己的业务逻辑代码
+    }
+    // 返回一个对象包含公有方法和属性
+    return {
+        publicMethod1: publicMethod1,
+        publicMethod2: publicMethod1
+    };
+})();
+
+
+// ------------------------------------------------------------------------------------------------------------------------
+  代理模式
+  代理的优点：
+
+代理对象可以代替本体被实例化，并使其可以被远程访问；
+它还可以把本体实例化推迟到真正需要的时候；对于实例化比较费时的本体对象，或者因为尺寸比较大以至于不用时不适于保存在内存中的本体，我们可以推迟实例化该对象；
+用户可以放心地请求代理，他们只关心是否能得到想要的结果。假如我门不需要代理对象的话，直接可以换成本体对象调用该方法即可。
+在任何使用本体对象的地方都可以替换成使用代理。
+
+// 先申明一个奶茶妹对象
+var TeaAndMilkGirl = function(name) {
+    this.name = name;
+};
+// 这是京东ceo先生
+var Ceo = function(girl) {
+    this.girl = girl;
+    // 送结婚礼物 给奶茶妹
+    this.sendMarriageRing = function(ring) {
+        console.log("Hi " + this.girl.name + ", ceo送你一个礼物：" + ring);
+    }
+};
+// 京东ceo的经纪人是代理，来代替送
+var ProxyObj = function(girl){
+    this.girl = girl;
+    // 经纪人代理送礼物给奶茶妹
+    this.sendGift = function(gift) {
+        // 代理模式负责本体对象实例化
+        (new Ceo(this.girl)).sendMarriageRing(gift);
+    }
+};
+// 初始化
+var proxy = new ProxyObj(new TeaAndMilkGirl("奶茶妹"));
+proxy.sendGift("结婚戒"); // Hi 奶茶妹, ceo送你一个礼物：结婚戒
+
+
+var myImage = (function(){
+    var imgNode = document.createElement("img");
+    document.body.appendChild(imgNode);
+    return function(src){
+        imgNode.src = src; 
+    }
+})();
+// 代理模式
+var ProxyImage = (function(){
+    var img = new Image();
+    img.onload = function(){
+        myImage(this.src);
+    };
+    return function(src) {
+                myImage("http://img.lanrentuku.com/img/allimg/1212/5-121204193Q9-50.gif");
+        img.src = src;
+    }
+})();
+// 调用方式
+ProxyImage("https://img.alicdn.com/tps/i4/TB1b_neLXXXXXcoXFXXc8PZ9XXX-130-200.png");
+
+
+// ------------------------------------------------------------------------------------------------------------------------
+  理解缓存代理：
+
+   缓存代理的含义就是对第一次运行时候进行缓存，当再一次运行相同的时候，直接从缓存里面取，这样做的好处是避免重复一次运算功能，如果运算非常复杂的话，对性能很耗费，那么使用缓存对象可以提高性能;我们可以先来理解一个简单的缓存列子，就是网上常见的加法和乘法的运算。代码如下：
+
+// 计算乘法
+var mult = function(){
+    var a = 1;
+    for(var i = 0,ilen = arguments.length; i < ilen; i+=1) {
+        a = a*arguments[i];
+    }
+    return a;
+};
+// 计算加法
+var plus = function(){
+    var a = 0;
+    for(var i = 0,ilen = arguments.length; i < ilen; i+=1) {
+        a += arguments[i];
+    }
+    return a;
+}
+// 代理函数
+var proxyFunc = function(fn) {
+    var cache = {};  // 缓存对象
+    console.log(cache)
+    return function(){
+        var args = Array.prototype.join.call(arguments,',');
+        if(args in cache) {
+            return cache[args];   // 使用缓存代理
+        }
+        return cache[args] = fn.apply(this,arguments);
+    }
+};
+var proxyMult = proxyFunc(mult);
+console.log(proxyMult(1,2,3,4)); // 24
+console.log(proxyMult(1,2,3,4)); // 缓存取 24
+
+var proxyPlus = proxyFunc(plus);
+console.log(proxyPlus(1,2,3,4));  // 10
+console.log(proxyPlus(1,2,3,4));  // 缓存取 10
+
+
+
+// ------------------------------------------------------------------------------------------------------------------------
+  策略模式
+  1. 策略模式利用组合，委托等技术和思想，有效的避免很多if条件语句。
+
+  2. 策略模式提供了开放-封闭原则，使代码更容易理解和扩展。
+
+  3. 策略模式中的代码可以复用。
+// 策略对象
+var strategys = {
+    isNotEmpty: function(value,errorMsg) {
+        if(value === '') {
+            return errorMsg;
+        }
+    },
+    // 限制最小长度
+    minLength: function(value,length,errorMsg) {
+        if(value.length < length) {
+            return errorMsg;
+        }
+    },
+    // 手机号码格式
+    mobileFormat: function(value,errorMsg) {
+        if(!/(^1[3|5|8][0-9]{9}$)/.test(value)) {
+            return errorMsg;
+        }
+    } 
+};
+var Validator = function(){
+    this.cache = [];  // 保存效验规则
+};
+Validator.prototype.add = function(dom,rules) {
+    var self = this;
+    for(var i = 0, rule; rule = rules[i++]; ){
+        (function(rule){
+            var strategyAry = rule.strategy.split(":");
+            var errorMsg = rule.errorMsg;
+            self.cache.push(function(){
+                var strategy = strategyAry.shift();
+                strategyAry.unshift(dom.value);
+                strategyAry.push(errorMsg);
+                return strategys[strategy].apply(dom,strategyAry);
+            });
+        })(rule);
+    }
+};
+Validator.prototype.start = function(){
+    for(var i = 0, validatorFunc; validatorFunc = this.cache[i++]; ) {
+    var msg = validatorFunc(); // 开始效验 并取得效验后的返回信息
+    if(msg) {
+        return msg;
+    }
+    }
+};
+// 代码调用
+var registerForm = document.getElementById("registerForm");
+var validateFunc = function(){
+    var validator = new Validator(); // 创建一个Validator对象
+    /* 添加一些效验规则 */
+    validator.add(registerForm.userName,[
+        {strategy: 'isNotEmpty',errorMsg:'用户名不能为空'},
+        {strategy: 'minLength:6',errorMsg:'用户名长度不能小于6位'}
+    ]);
+    validator.add(registerForm.password,[
+        {strategy: 'minLength:6',errorMsg:'密码长度不能小于6位'},
+    ]);
+    validator.add(registerForm.phoneNumber,[
+        {strategy: 'mobileFormat',errorMsg:'手机号格式不正确'},
+    ]);
+    var errorMsg = validator.start(); // 获得效验结果
+    return errorMsg; // 返回效验结果
+};
+// 点击确定提交
+registerForm.onsubmit = function(){
+    var errorMsg = validateFunc();
+    if(errorMsg){
+        alert(errorMsg);
+        return false;
+    }
+}
+
+
+// ------------------------------------------------------------------------------------------------------------------------
+  发布--订阅模式
+  发布---订阅模式又叫观察者模式，它定义了对象间的一种一对多的关系，让多个观察者对象同时监听某一个主题对象，当一个对象发生改变时，所有依赖于它的对象都将得到通知。
+
+var Observer = function () {
+  this.list = {};
+}
+
+Observer.prototype = {
+  on: function (handel, fn) {
+    if(!this.list[handel]){
+      this.list[handel] = [];
+    }
+    this.list[handel].push(fn)
+  },
+  emit: function (handel, args) {
+    if(!this.list[handel]){
+      return;
+    }
+    for(var i=0; i<this.list[handel].length; i++){
+      this.list[handel][i].call(this, args);
+    }
+  },
+  del: function (handel){
+    delete this.list[handel]
+  }
+}
+
+var observer = new Observer();
+
+module.exports = observer;
+
+
+// ------------------------------------------------------------------------------------------------------------------------
+  中介者模式
+  中介者模式对于我们日常生活中经常会碰到，比如我们去房屋中介去租房，房屋中介人在租房者和房东出租者之间形成一条中介;租房者并不关心租谁的房，房东出租者也并不关心它租给谁，因为有中介，所以需要中介来完成这场交易。
+
+中介者模式的作用是解除对象与对象之间的耦合关系，增加一个中介对象后，所有的相关对象都通过中介者对象来通信，而不是相互引用，所以当一个对象发送改变时，只需要通知中介者对象即可。中介者使各个对象之间耦合松散，而且可以独立地改变它们之间的交互。

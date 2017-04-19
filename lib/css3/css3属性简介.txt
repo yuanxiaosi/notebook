@@ -1,0 +1,26 @@
+transform
+	rotate 旋转
+	rotateX 延X轴方向旋转
+	rotateY 延Y轴方向旋转
+	rotateZ===rotate 延Z轴方向旋转
+
+	translate（10px,20px）x方向平移10px，y方向平移20px
+	translate3d（x，y，z）
+	translateX（x）x方向平移x
+	translateY（y）y方向平移y
+	translateZ（z）z方向平移z
+
+transition（a，b，c，d） 过渡效果 a=css属性 b=时间 c=时间曲线 d=延时时间
+
+《-----------------------动画---------------------------------》
+div{
+	animation: myfirst 5s;
+}
+@keyframes myfirst{
+	from {background: red;}
+	to {background: yellow;}
+}
+
+《-----------------------动画---------------------------------》
+
+http://bennettfeely.com/clippy/ 新属性

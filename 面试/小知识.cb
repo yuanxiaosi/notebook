@@ -1,0 +1,110 @@
+{}
+// ------------------------------------------------------------
+类型
+    值类型
+        数字，字符串，null，undefined，布尔值
+    引用类型
+        对象，数组，函数
+
+// ------------------------------------------------------------
+函数声明和函数表达式
+function aaa(){}  && var aaa = function(){}
+函数声明可以提前调用，函数表达式的话是什么时候遇到什么时候用（执行先后顺序不同）
+
+
+// ------------------------------------------------------------
+proterty && attribute
+proterty 是 javascript里的dom的属性，可以是对象
+attribute 是dom的标签的特性，是字符串（如id，name等）
+
+
+// ------------------------------------------------------------
+闭包
+    （javascript的链式结构，子对象会一级一级的向上寻找所有父对象的变量,所以父对象变量对子对象都是可见的）
+    本质就是函数内部和函数外部的一个桥梁（让外部函数获取到内部函数的一些局部变量）
+    他的作用有2个，1是读取函数内部的局部变量，2是让这些变量的值始终保存在内存中
+    不要经常使用，因为闭包，会导致内存泄漏，可以使用null来清理内存
+
+
+// ------------------------------------------------------------
+作用域链
+    子函数一级一级的向上对父对象里面作用域的变量进行查找
+    一级一级父对象的作用域的有序集合就是叫作用域链
+
+
+// ------------------------------------------------------------
+原型和原型链
+    用作于继承
+
+    var dog = function(){}
+    dog.prototype.say = "hello"
+    var d = new dog()
+    d.__proto__ === dog.prototype
+    子类的__proto__等于父类的prototype
+
+    prototype是函数的一个属性（每个函数都有一个prototype属性），这个属性是一个指针，指向一个对象。它是显示修改对象的原型的属性。
+
+    __proto__是一个对象拥有的内置属性（请注意：prototype是函数的内置属性，__proto__是对象的内置属性），是JS内部使用寻找原型链的属性。
+
+
+// ------------------------------------------------------------
+事件代理/委托
+  function getClass(name){ //获取classname
+    var body = document.body;
+    var tag = body.getElementsByTagName("*");
+    var classList = [];
+    var reg = new RegExp("\\b" + name + "\\b", "i");
+    for(var i=0; i<tag.length; i++){
+      reg.test(tag[i].getAttribute("class")) ? classList.push(tag[i]):null;
+    }
+    return classList;
+  }
+
+
+  function delegate(name, event, cb){
+    document.body.addEventListener(event, function(e){
+      var target = e.target;
+      var index = [].slice.call(e.target.parentNode.children).indexOf(e.target); //查找当前index
+      var className = target.getAttribute("class");
+      var reg = new RegExp("\\b" + name + "\\b", "i");
+      if(reg.test(className)){
+        cb.apply(e.target, [e, index])
+      }
+    })
+  }
+
+  delegate("bbb", "click", function(e, index){
+    console.log(this)
+    console.log(index)
+  })
+
+
+// ------------------------------------------------------------
+继承
+  function Animal(name, color){ 
+    this.name = name;
+    this.getName = function(){
+      return this.name;
+    }
+  }
+　Animal.prototype.species = "动物";
+
+  function Cat(name,color){
+　　this.name = name;
+　　this.color = color;
+    Animal.call(this, name)
+　}        
+  function extend(child, parent){
+    var F = function(){}
+    F.prototype = parent.prototype;
+    child.prototype = new F();
+    child.prototype.constructor = child;
+    child.parent = parent.prototype;
+  }
+  extend(Cat, Animal);
+  var cat = new Cat("cat", "black");
+  console.log(cat.parent)
+
+
+
+

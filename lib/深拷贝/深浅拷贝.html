@@ -1,0 +1,107 @@
+<html>
+<body>
+
+<script type="text/javascript">
+	
+	var number = 199;
+	var string = "hellow";
+	var arr = [1, 2, 3, 4];
+	var object = {
+		"1": "object1",
+		"2": "object2"
+	}
+
+	var json1 = {
+		"1": [1,2],
+		"2": [2,3]
+	}
+
+	var json2 = [
+		{"1": [1,2,3]},
+		{"2": [2,3,4]}
+	]
+
+	function fun () {
+
+	}
+
+
+	/*var res = arr;
+	res[0] = 188;
+	console.log(arr);*/
+
+/*	console.log(json2.constructor.name == "Array");
+	console.log(object.constructor.name == 'Object');*/
+
+
+
+	(function(w){
+
+		function Evaluate (data) {
+			
+		}
+		Evaluate.prototype.initData = function (data) {
+			var me = this;
+			var res;
+			switch (data.constructor.name){
+				case "Number":
+					res = me.getNumber(data);
+					break;
+				case "Sting":
+					res = me.getString(data);
+					break;
+				case "Array":
+					res = me.getArray(data);
+					break;
+				case "Object":
+					res = me.getObject(data);
+					break;
+				case "Function":
+					console.log("function")
+					break;
+				default:
+					console.log(data.constructor.name);
+			}
+			return res;
+		}
+		Evaluate.prototype.getNumber = function (data) {
+			var number;
+			number = data;
+			return number;
+		}
+		Evaluate.prototype.getString = function (data) {
+			var string
+			string = data;
+			return string;
+		}
+		Evaluate.prototype.getArray = function (data) {
+			var me = this;
+			var arr = [];
+			for(var i=0; i<data.length; i++){
+				arr[i] = me.initData(data[i]);
+			}
+			return arr;
+		}
+		Evaluate.prototype.getObject = function (data) {
+			var me = this;
+			var object = {};
+			for(var i in data){
+				object[i] = me.initData(data[i])
+			}
+			return object;
+		}
+
+		w.evaluate = new Evaluate();
+	})(window)
+
+
+	var getRes = evaluate.initData(json2);
+
+	console.log(getRes);
+
+
+
+</script>
+
+</body>
+</html>

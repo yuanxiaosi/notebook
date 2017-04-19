@@ -1,0 +1,55 @@
+{}
+// ------------------------------------------------------------
+#jquerty插件编写
+$(document).ready(function(){
+  $.fn.extend({
+    "alert": function(){
+      $(this).click(function(){
+        alert("111")
+      })
+    }
+  })
+    
+  $("body").alert()
+})
+
+
+//promise
+//
+var tasks = [];
+for(var i=0;i<5;i++){
+    ((j) => {
+        tasks.push(new Promise((resolve) => {
+            setTimeout(() => {
+                console.log(new Date, j);
+                resolve();  // 这里一定要 resolve，否则代码不会按预期 work
+            }, 1000 * j);   // 定时器的超时时间逐步增加
+        }));
+    })(i);
+}
+
+Promise.all(tasks).then(() => {
+    setTimeout(() => {
+        console.log(new Date, i);
+    }, 1000);   // 注意这里只需要把超时设置为 1 秒
+});
+
+
+var fn = function(resolve, reject){
+    var a = Math.floor(Math.random()*2)
+    if(a == 0){
+        resolve(0)
+    }else{
+        reject(1)
+    }
+}
+
+var p = new Promise(fn)
+
+p.then((r)=>{
+    console.log(r)
+}).catch((r)=>{
+    console.log(r)
+})
+
+

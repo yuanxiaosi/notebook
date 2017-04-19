@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>3333</title>
+    <link rel='stylesheet' href='' />
+  </head>
+  <style>
+    /*1,.15,.28,.89*/
+    #img2{
+      -webkit-transform: rotateZ(0deg);
+      -webkit-transition: all 4000ms cubic-bezier(.8,.18,.29,.93);
+      transition:         all 4000ms cubic-bezier(.8,.18,.29,.93);
+    }
+  </style>
+  <body>
+    <div class="p2"><img id="img2" src="./img/rotate-static.png"></div>
+    <script src="./jquery.js"></script>
+    <script>
+      
+      setTimeout(function (){
+        $('#img2').css ('-webkit-transform', 'rotateZ(3800deg)');
+      }, 2000)
+
+      var tt = document.querySelector('#img2');
+
+      tt.addEventListener("webkitTransitionEnd", function(){ //动画结束时事件
+        
+        console.log(2);
+      }, false);
+
+
+      /*var a = 0;
+      var b = 0;
+      var c = 1;
+      var d = 1;
+      var t = 0;
+
+      //完美的抽奖速度计算
+      function bse(a, b, c, d, t){
+        var t = t/400;
+        return (1-t)*(1-t)*(1-t)*a+3*(1-t)*(1-t)*t*b+3*(1-t)*t*t*c+t*t*t*t*d;
+      }
+
+      var s = 0;
+      function run(){
+        t++;
+        var s = 1800*bse(a, b, c, d, t);//速度变化
+        console.log(s);
+        $('#img2').css ('-webkit-transform', 'rotateZ('+ s +'deg)');
+        if(t<400){
+          setTimeout(run,10);
+        }
+      }
+
+      run();*/
+
+      
+      
+    </script>
+  </body>
+</html>

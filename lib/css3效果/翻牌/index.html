@@ -1,0 +1,126 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" name="viewport">
+<title></title>
+<style type="text/css">
+*{ padding:0px; margin:0px;}
+.whole{
+	position:relative;
+	width: 320px;
+	height: 500px;
+	margin:auto;
+	position: absolute;
+	left: 0;
+	bottom: 0;
+	right: 0;
+	top: 0;
+	/*-webkit-transform-style: preserve-3d;*/
+}
+.listKa{ 
+	width:100px; 
+	height:100px; 
+	margin:0 auto;
+	-webkit-transform-style: preserve-3d; 
+	position:absolute; 
+	display: block; 
+	-webkit-transition: all 1s;
+}
+.listKa p{
+	width: 100%;
+	height: 100%;
+	position: absolute;
+	text-align: center;
+	color: rgba(0,0,0,0.9);
+	opacity: 1;
+	font:bold 45px/100px "Microsoft YaHei";
+	border-radius: 5px;
+}
+.listKa p:nth-child(odd){
+	background: #995C7F
+}
+.listKa p:nth-child(2n){
+	background: #835A99
+}
+
+.listKa:nth-child(1){left: 40px;top: 100px;}
+.listKa:nth-child(2){left: 180px;top: 100px;}
+.listKa:nth-child(3){left: 40px;top: 240px;}
+.listKa:nth-child(4){left: 180px;top: 240px;}
+
+
+.moveClass{
+	-webkit-animation:move1 1s linear forwards;
+}
+
+
+@-webkit-keyframes move1{
+	0%{ -webkit-transform:rotateY(0);}
+	100%{ -webkit-transform:rotateY(900deg);}
+}
+
+
+</style>
+</head>
+<body>
+	<div class="whole">
+		<div class="listKa">
+        	<p style="-webkit-transform:rotateY(0) translateZ(0px)">正</p>
+			<p style="-webkit-transform:rotateY(180deg) translateZ(0px)">反</p>
+        </div>
+	
+		<div class="listKa">
+        	<p style="-webkit-transform:rotateY(0) translateZ(0px)">正</p>
+			<p style="-webkit-transform:rotateY(180deg) translateZ(0px)">反</p>
+        </div>
+
+
+		<div class="listKa">
+        	<p style="-webkit-transform:rotateY(0) translateZ(0px)">正</p>
+			<p style="-webkit-transform:rotateY(180deg) translateZ(0px)">反</p>
+        </div>
+		<div class="listKa">
+        	<p style="-webkit-transform:rotateY(0) translateZ(0px)">正</p>
+			<p style="-webkit-transform:rotateY(180deg) translateZ(0px)">反</p>
+        </div>
+	</div>
+</body>
+
+<script type="text/javascript" src="./jquery.min.js"></script>
+<script type="text/javascript">
+
+	var xyArr = [
+		{x: -45, y: 45},
+		{x: 45, y: 45},
+		{x: -45, y: -45},
+		{x: 45, y: -45}
+	];
+	var moving = false;
+
+	$(".listKa").click(function(){
+		if(moving){
+			return;
+		}
+		moving = true;
+		$(this).addClass("moveClass");
+
+	})
+
+	$(".listKa").one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', function(){
+		$(this).css("webkitTransform", "rotateY(180deg)");
+		$(this).removeClass("moveClass");
+
+	    MoveToMid($(this))
+	});
+
+	function MoveToMid($el){
+		$el.siblings().css("opacity", 0);
+		setTimeout(function(){
+			var num = $el.index();
+			$el.css("webkitTransform", "scale(1.5) rotateY(180deg) translate("+ xyArr[num].x +"px, "+ xyArr[num].y +"px)");
+		}, 500)
+		
+	}
+</script>
+</html>

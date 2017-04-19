@@ -1,0 +1,288 @@
+<html>
+  <head>
+      <meta http-equiv="content-type" content="text/html;charset=utf-8">
+      <title>sl</title>
+      <script src="./jquery/jquery.js"></script>
+  </head>
+  <style>
+    #main{
+      /*width: 200px;
+      height: 200px;*/
+      margin: 50px auto;
+    }
+    .tr{
+      overflow: hidden;
+      text-align: center;
+    }
+    .td{
+      width: 23px;
+      height: 23px;
+      border: 1px solid #ccc;
+      display: block;
+      float: left;
+    }
+
+    .landmines{
+      background: #f00;
+    }
+  </style>
+
+  <body>
+
+  <div id="main">
+    <div>剩余雷数量：<span class="landminesNum"></span></div>
+  </div>
+  
+  
+  <script>
+    var width = 20; //宽
+    var height = 20;//高
+    var initLandminesNum = 100;
+    var liNum = width*height;
+    var landminesNum = 0; //雷数量
+    
+    var landminesArr = [];
+    var tableArr = [];
+
+
+    for(var i=0; i<height; i++){
+      tableArr[i] = [];
+      for(var j=0; j<width; j++){
+        tableArr[i][j] = false;
+      }
+    }
+    console.log(tableArr)
+
+    $("#main").css("width", width*25+"px")
+
+    initTable();
+
+
+    $(".td").mousedown(function(e){
+
+      if(e.which == 1){
+        $(this).css("background", "#fff")
+        var data = $(this).attr("data");
+        var x = parseInt(data.split("-")[0]);
+        var y = parseInt(data.split("-")[1]);
+
+        if($(this).html() != ""){
+          return;
+        }
+
+        if(tableArr[x][y] != 9){
+          $(this).html(tableArr[x][y]);
+          extendNum(x, y);
+        }else{
+          showAll();
+          alert("game over");
+        }
+      }
+
+      if(e.which == 3){
+        if($(this).html() == ""){
+          initLandminesNum-=1;
+          $(".landminesNum").html(initLandminesNum);
+          $(this).css("background", "#000")
+        }
+      }
+    })
+
+    $(document).bind('contextmenu',function(){
+      return false;
+    });
+
+
+    function initTable () {
+      var htm = "";
+      for(var i=0; i<height; i++){
+        var $tr = $("<div class='tr'></div>");
+        var trHtm = "";
+        for(var j=0; j<width; j++){
+          var td = "<div class='td' data='"+i+"-"+j+"'></div>"
+          trHtm += td;
+        }
+        $tr.html(trHtm)
+        $("#main").append($tr);
+      }
+      
+      initLandmines();
+    }
+
+    function initLandmines () {
+
+      var randomWidth = Math.ceil(Math.random()*width)-1;
+      var randomHeight = Math.ceil(Math.random()*height)-1;
+ 
+      if(landminesNum == initLandminesNum){
+        ForEachTable();
+        return;
+      }
+      
+      if(!tableArr[randomHeight][randomWidth]){
+
+
+        tableArr[randomHeight][randomWidth] = 9;
+        landminesNum +=1;
+        //$(".tr").eq(randomHeight).find('.td').eq(randomWidth).addClass('landmines');
+      }
+
+      initLandmines();
+    }
+
+    function ForEachTable () {
+      for(var i=0; i<height; i++){
+        for(var j=0; j<width; j++){
+          if(tableArr[i][j] != 9){
+            initNum(i,j);
+          }
+        }
+      }
+    }
+
+    function initNum (x,y) {
+      var num = 0;
+
+
+      if(tableArr[x][y-1] == 9){//左
+        num +=1;
+      }
+
+      if(tableArr[x][y+1] == 9){//右
+        num +=1;
+      }
+
+      if(tableArr[x-1]){
+        if(tableArr[x-1][y] == 9){//上
+          num +=1;
+        }
+
+        if(tableArr[x-1][y+1] == 9){//右上
+          num +=1;
+        }
+
+        if(tableArr[x-1][y-1] == 9){//左上
+          num +=1;
+        }
+      }
+     
+      if(tableArr[x+1]){
+        if(tableArr[x+1][y] == 9){//下
+          num +=1;
+        }
+
+        if(tableArr[x+1][y+1] == 9){//右下
+          num +=1;
+        }
+
+        if(tableArr[x+1][y-1] == 9){//左下
+          num +=1;
+        }
+      }
+      
+      tableArr[x][y] = num;
+      //$(".tr").eq(x).find('.td').eq(y).html(num);
+    }
+
+    function showNum(x, y, num){
+      $(".tr").eq(x).find('.td').eq(y).html(num);
+    }
+
+    function showLandmines(x, y){
+      $(".tr").eq(x).find('.td').eq(y).css("background", "#f00");
+    }
+
+
+    function extendNum (x, y) {
+      /*console.log(tableArr[x][y-1] == 0 && $(".tr").eq(x).find('.td').eq(y-1).html() == "")
+      console.log(tableArr[x][y+1] == 0 && $(".tr").eq(x).find('.td').eq(y+1).html() == "")
+      if(tableArr[x-1]){
+        
+        console.log(tableArr[x-1][y] == 0 && $(".tr").eq(x-1).find('.td').eq(y).html() == "")
+        console.log(tableArr[x-1][y+1] == 0 && $(".tr").eq(x-1).find('.td').eq(y+1).html() == "")
+        console.log(tableArr[x-1][y-1] == 0 && $(".tr").eq(x-1).find('.td').eq(y-1).html() == "")
+      }
+      if(tableArr[x+1]){
+        console.log(tableArr[x+1][y] == 0 && $(".tr").eq(x+1).find('.td').eq(y).html() == "")
+        console.log(tableArr[x+1][y+1] == 0 && $(".tr").eq(x+1).find('.td').eq(y+1).html() == "")
+        console.log(tableArr[x+1][y-1] == 0 && $(".tr").eq(x).find('.td').eq(y-1).html() == "")
+      }
+      console.log(x,y)*/
+
+      if(tableArr[x][y-1] == 0 && $(".tr").eq(x).find('.td').eq(y-1).html() == ""){//左
+        showNum(x, y-1, 0)
+        extendNum(x, y-1);
+      }else if(tableArr[x][y-1] != 0 && tableArr[x][y-1] != 9 && $(".tr").eq(x).find('.td').eq(y-1).html() == ""){
+        showNum(x, y-1, tableArr[x][y-1])
+      }
+
+      if(tableArr[x][y+1] == 0 && $(".tr").eq(x).find('.td').eq(y+1).html() == ""){//右
+        showNum(x, y+1, 0)
+        extendNum(x, y+1);
+      }else if(tableArr[x][y+1] != 0 && tableArr[x][y+1] != 9 && $(".tr").eq(x).find('.td').eq(y+1).html() == ""){
+        showNum(x, y+1, tableArr[x][y+1])
+      }
+
+      if(tableArr[x-1]){
+        if(tableArr[x-1][y] == 0 && $(".tr").eq(x-1).find('.td').eq(y).html() == ""){//上
+          showNum(x-1, y, 0)
+          extendNum(x-1, y);
+        }else if(tableArr[x-1][y] != 0 && tableArr[x-1][y] != 9 && $(".tr").eq(x-1).find('.td').eq(y).html() == ""){
+          showNum(x-1, y, tableArr[x-1][y])
+        }
+
+        if(tableArr[x-1][y+1] == 0 && $(".tr").eq(x-1).find('.td').eq(y+1).html() == ""){//右上
+          showNum(x-1, y+1, 0)
+          extendNum(x-1, y+1);
+        }else if(tableArr[x-1][y+1] != 0 && tableArr[x-1][y+1] != 9 && $(".tr").eq(x-1).find('.td').eq(y+1).html() == ""){
+          showNum(x-1, y+1, tableArr[x-1][y+1])
+        }
+
+        if(tableArr[x-1][y-1] == 0 && $(".tr").eq(x-1).find('.td').eq(y-1).html() == ""){//左上
+          showNum(x-1, y-1, 0)
+          extendNum(x-1, y-1);
+        }else if(tableArr[x-1][y-1] != 0 && tableArr[x-1][y-1] != 9 && $(".tr").eq(x-1).find('.td').eq(y-1).html() == ""){
+          showNum(x-1, y-1, tableArr[x-1][y-1])
+        }
+      }
+     
+      if(tableArr[x+1]){
+        if(tableArr[x+1][y] == 0 && $(".tr").eq(x+1).find('.td').eq(y).html() == ""){//下
+          showNum(x+1, y, 0)
+          extendNum(x+1, y);
+        }else if(tableArr[x+1][y] != 0 && tableArr[x+1][y] != 9 && $(".tr").eq(x+1).find('.td').eq(y).html() == ""){
+          showNum(x+1, y, tableArr[x+1][y])
+        }
+
+        if(tableArr[x+1][y+1] == 0 && $(".tr").eq(x+1).find('.td').eq(y+1).html() == ""){//右下
+          showNum(x+1, y+1, 0)
+          extendNum(x+1, y+1);
+        }else if(tableArr[x+1][y+1] != 0 && tableArr[x+1][y+1] != 9 && $(".tr").eq(x+1).find('.td').eq(y+1).html() == ""){
+          showNum(x+1, y+1, tableArr[x+1][y+1])
+        }
+
+        if(tableArr[x+1][y-1] == 0 && $(".tr").eq(x).find('.td').eq(y-1).html() == ""){//左下
+          showNum(x+1, y-1, 0)
+          extendNum(x+1, y-1);
+        }else if(tableArr[x+1][y-1] != 0 && tableArr[x+1][y-1] != 9 && $(".tr").eq(x+1).find('.td').eq(y-1).html() == ""){
+          showNum(x+1, y-1, tableArr[x+1][y-1])
+        }
+      }
+    }
+
+    function showAll () {
+      for(var i=0; i<height; i++){
+        for(var j=0; j<width; j++){
+          if(tableArr[i][j] == 9){
+            showLandmines(i, j);
+          }else{
+            showNum(i, j, tableArr[i][j]);
+          }
+        }
+      }
+    }
+
+  </script>
+  </body>
+
+</html>

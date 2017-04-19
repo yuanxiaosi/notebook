@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>111</title>
+    <link rel='stylesheet' href='' />
+  </head>
+  <body>
+    <div class="p2"><img id="img2" src="./img/rotate-static.png"></div>
+    <script src="./jquery.js"></script>
+    <script>
+    
+
+
+      var start = 0;//开始Y坐标
+      var end = 0;//结束Y坐标
+      var t = 0;//x坐标
+      var c = 40;//中间点Y坐标
+
+      //完美的抽奖速度计算
+      function bse(start, end, t, c){
+        var t = t/200;
+        return (1-t)*(1-t)*start+2*t*(1-t)*c+t*t*end;
+      }
+
+      var s = 0;
+      function run(){
+        t++;
+        var speed = bse(start, end, t, c);//速度变化
+        s = s + speed;
+        $('#img2').css ('-webkit-transform', 'rotateZ('+ s +'deg)');
+        if(t<200){
+          setTimeout(run,10);
+        }
+      }
+
+      run();
+
+      
+      
+    </script>
+  </body>
+</html>

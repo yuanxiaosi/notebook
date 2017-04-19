@@ -1,0 +1,100 @@
+<html>
+  <head>
+	  <meta charset='UTF-8'>
+	  <title>CSS3 Cloud Animations By Montana Flynn</title>
+	  <style type="text/css">
+	  	*{padding: 0;margin: 0;}
+        .mid{
+            margin: 50px auto;
+            width: 400px;
+        }
+        #canvas1{
+            border: 1px solid #ccc;
+        }
+        #canvas2{
+            border: 1px solid #ccc;
+        }
+        .input{
+            margin-top: 10px;
+        }
+        #ok{
+            width: 50px;
+            height: 20px;
+            border: 1px solid #ccc;
+            margin-top: 10px;
+            margin-left: 32px;
+        }
+
+	  </style>
+	</head>
+
+	<body>
+        <div class="mid">
+            <canvas id="canvas1" width="200" height="200"></canvas><br/>
+            <canvas id="canvas2" width="200" height="200"></canvas><br/>
+            p1x:<input class="input" id="p1x" type="text" value="200" /><br/>
+            p1y:<input class="input" id="p1y" type="text" value="0" /><br/>
+            p2x:<input class="input" id="p2x" type="text" value="0" /><br/>
+            p2y:<input class="input" id="p2y" type="text" value="200" /><br/>
+            <div id="ok">ok</div>
+        </div>
+	</body>
+
+  <script src="./main.js"></script>
+  <script>
+    ok.onclick = function(){
+        var p1x = document.getElementById("p1x").value;
+        var p1y = document.getElementById("p1y").value;
+        var p2x = document.getElementById("p2x").value;
+        var p2y = document.getElementById("p2y").value;
+        renderCanvas1(p1x, p1y, p2x, p2y);
+        renderCanvas2(p1x, p1y, p2x, p2y);
+    }
+
+    function renderCanvas1(p1x, p1y, p2x, p2y){ //用canvan自带bezierCurveTo函数实现
+        p1x = p1x;
+        p1y = 200-p1y;
+        p2x = p2x;
+        p2y = 200-p2y;
+
+        var canvas1 = document.getElementById("canvas1");
+        var context1 = canvas1.getContext("2d");
+        canvas1.width = canvas1.width    //清空画布
+        context1.clearRect(0,0,200,200); //清空画布，不知道为啥无效
+        
+        context1.moveTo(0, 200);
+        context1.bezierCurveTo(p1x, p1y, p2x, p2y, 200, 0);
+        context1.stroke();
+        
+        
+    }
+
+    function renderCanvas2(p1x, p1y, p2x, p2y){
+        p1x = p1x/200;
+        p1y = p1y/200;
+        p2x = p2x/200;
+        p2y = p2y/200;
+
+        var bezier = new Bezier();
+        bezier.UnitBezier(p1x, p1y, p2x, p2y);
+
+        var canvas2 = document.getElementById("canvas2");
+        var context2 = canvas2.getContext("2d");
+        
+        context2.clearRect(0,0,200,200);
+
+        for(var i=1; i<=200; i=i+0.001){
+            y = bezier.solve(i/200)
+            context2.beginPath();
+            context2.arc(i, 200-(y*200), 1, 0, Math.PI * 2, true);
+            context2.closePath();
+            context2.fillStyle = '#000';
+            context2.fill();
+        }
+        
+        alert("canvas2渲染完成")
+    }
+  </script>
+</html>
+
+

@@ -1,0 +1,101 @@
+<html>
+<head>
+  <meta charset='UTF-8'>
+  <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+  <meta name="format-detection" content="telephone=no"/>
+  <title>index</title>
+
+  <style>
+    *{padding: 0px;margin: 0px;}
+    .body { width: 100%; height: 100%;  overflow: hidden;}
+    .scroll{overflow: hidden;}
+    .scroll ul{display: inline-block; width: 100%; height: 100%; white-space: nowrap; font-size:0}
+    .scroll ul li{display: inline-block; width: 100%; height: 100%; padding: 0;margin: 0;list-style: none; color: #fff; font-size: 400px; text-align: center; line-height: 300px;} 
+    .scroll ul li:nth-child(2n+1){ background: #000;}
+    .scroll ul li:nth-child(2n){ background: #ff0000;}
+  </style>
+</head>
+
+<body>
+  <div class="scroll">
+    <ul style="-webkit-transform: translateX(0px)">
+      <li>1</li>
+      <li>2</li>
+      <li>3</li>
+      <li>4</li>
+      <li>5</li>
+      <li>6</li>
+      <li>7</li>
+      <li>8</li>
+    </ul>
+  </div>
+
+<div id="footer"></div>
+
+
+<script>
+  var div = document.querySelectorAll(".scroll")[0];
+  var ul = div.querySelectorAll("ul")[0];
+  var li = ul.querySelectorAll("li");
+  var startX = 0;       //鼠标开始位置
+  var moveX = 0;        //鼠标滑动距离
+  var index = 0;        //当前第几屏幕
+  var timeOut = null;   //定时器
+  var nowB = 0;         //目前transform为止
+  var t = 0; //当前时间
+  var b = 0; //初始值
+  var c = 0; //变化量
+  var d = 15; //持续时间
+  var docWidth = document.body.clientWidth;
+
+  div.addEventListener('touchstart', touchStart);  
+  div.addEventListener('touchmove', touchMove);  
+  div.addEventListener('touchend', touchend); 
+
+  function touchStart(e){
+    moveX = 0;
+    startX = e.touches[0].pageX;  
+  }
+
+  function touchMove(e){
+    moveX = e.touches[0].pageX - startX;
+  }
+
+  function touchend(e){
+    if(moveX > 30 && index < 0){
+      clearInterval(timeOut);
+      b = nowB;
+      index += 1; 
+      c = index*docWidth - b;
+      _run();
+    }
+
+    if(moveX < -30 && index > -(li.length-1) ){
+      clearInterval(timeOut);
+      b = nowB;
+      index -= 1;
+      c = index*docWidth - b;
+      _run();
+    }
+  }
+
+  function _run(){
+    timeOut = setInterval(function(){
+      t++
+      if(t>d){
+        t = 0;
+        clearInterval(timeOut);
+        return;
+      }
+      var trsX = Linear(t, b, c, d);
+      ul.style.webkitTransform = "translateX("+trsX+"px)";
+      nowB = trsX;
+    }, 1000/60)
+  }
+
+  function Linear(t, b, c, d) {
+    return c*t/d + b;
+  }
+</script>
+</body>
+</html>

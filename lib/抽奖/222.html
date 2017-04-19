@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>111</title>
+    <link rel='stylesheet' href='' />
+  </head>
+  <body>
+    <div class="p2"><img id="img2" src="./img/rotate-static.png"></div>
+    <script src="./jquery.js"></script>
+    <script src="../lib/tween/tween.js"></script>
+    <script>
+    
+
+/*
+ * Tween.js
+ * t: current time（当前时间）；
+ * b: beginning value（初始值）；
+ * c: change in value（变化量）；
+ * d: duration（持续时间）。
+ * you can visit 'http://easings.net/zh-cn' to get effect
+*/
+      var t = 0;//开始Y坐标
+      var b = 0;//结束Y坐标
+      var c = 3000;//x坐标
+      var d = 400;//duration（持续时间）。
+      var s = 0;
+
+      function run(){
+        t++;
+        var s = Tween.Cubic.easeInOut(t, b, c, d);
+
+        $('#img2').css ('-webkit-transform', 'rotateZ('+ s +'deg)');
+        if(t<d){
+          setTimeout(run,10);
+        }
+      }
+
+      run();
+
+      
+      
+    </script>
+  </body>
+</html>
