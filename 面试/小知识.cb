@@ -47,6 +47,15 @@ attribute 是dom的标签的特性，是字符串（如id，name等）
     __proto__是一个对象拥有的内置属性（请注意：prototype是函数的内置属性，__proto__是对象的内置属性），是JS内部使用寻找原型链的属性。
 
 
+    //new 的实现
+    function F(){
+      this.name = "123"
+    }
+    var obj  = {};
+    obj.__proto__ = F.prototype;
+    F.call(obj);
+
+
 // ------------------------------------------------------------
 事件代理/委托
   function getClass(name){ //获取classname
@@ -81,6 +90,7 @@ attribute 是dom的标签的特性，是字符串（如id，name等）
 
 // ------------------------------------------------------------
 继承
+  //原型链继承
   function Animal(name, color){ 
     this.name = name;
     this.getName = function(){
@@ -104,6 +114,36 @@ attribute 是dom的标签的特性，是字符串（如id，name等）
   extend(Cat, Animal);
   var cat = new Cat("cat", "black");
   console.log(cat.parent)
+
+  console.log(cat instanceof Object);//true
+  console.log(cat instanceof Animal);//true
+  console.log(cat instanceof Cat);//true
+
+  console.log(Object.prototype.isPrototypeOf(cat));//true
+  console.log(Animal.prototype.isPrototypeOf(cat));//true
+  console.log(Cat.prototype.isPrototypeOf(cat));//true
+
+
+
+  //借用构造函数实现超类继承，
+  //保证了原型链中引用类型值的独立
+  //子类型创建时也能够向父类型传递参数.
+  //随之而来的是, 如果仅仅借用构造函数,那么将无法避免构造函数模式存在的问题--方法都在构造函数中定义, 因此函数复用也就不可用了.而且超类型(如Father)中定义的方法,对子类型而言也是不可见的. 考虑此,借用构造函数的技术也很少单独使用.
+  function Father(){
+    this.colors = ["red","blue","green"];
+  }
+  function Son(){
+      Father.call(this);//继承了Father,且向父类型传递参数
+  }
+  var instance1 = new Son();
+  instance1.colors.push("black");
+  console.log(instance1.colors);//"red,blue,green,black"
+
+  var instance2 = new Son();
+  console.log(instance2.colors);//"red,blue,green" 可见引用类型值是独立的
+
+
+
 
 
 
