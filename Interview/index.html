@@ -1,0 +1,46 @@
+<html>
+  <head>
+	  <meta charset='UTF-8'>
+	  <title>CSS3 Cloud Animations By Montana Flynn</title>
+	  <style type="text/css">
+	  	#ct{
+	  		width: 200px;
+	  		height: 200px;
+	  	}
+	  </style>
+	</head>
+
+	<body>
+
+
+
+		<div id="ct" contenteditable="true" onchange="aaa(this)" onBlur="aaa(this)">123</div> 
+
+
+
+
+	  <script>
+	  	var str = `__GetZoneResult_ = {
+		    mts:'1581559',
+		    province:'广东',
+		    catName:'中国移动',
+		    telString:'15815595203',
+				areaVid:'30517',
+				ispVid:'3236139',
+				carrier:'广东移动'
+			}`
+			var reg = /\w+:/ig;
+			var res = str.replace(reg, function(s){
+				var ns = s.replace(":", "");
+				return "'"+ns+"':"
+			})
+			console.log(res)
+
+	  </script>
+
+
+
+	</body>
+</html>
+
+

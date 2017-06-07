@@ -1,18 +1,18 @@
 transform
-	rotate Ğı×ª
-	rotateX ÑÓXÖá·½ÏòĞı×ª
-	rotateY ÑÓYÖá·½ÏòĞı×ª
-	rotateZ===rotate ÑÓZÖá·½ÏòĞı×ª
+	rotate æ—‹è½¬
+	rotateX å»¶Xè½´æ–¹å‘æ—‹è½¬
+	rotateY å»¶Yè½´æ–¹å‘æ—‹è½¬
+	rotateZ===rotate å»¶Zè½´æ–¹å‘æ—‹è½¬
 
-	translate£¨10px,20px£©x·½ÏòÆ½ÒÆ10px£¬y·½ÏòÆ½ÒÆ20px
-	translate3d£¨x£¬y£¬z£©
-	translateX£¨x£©x·½ÏòÆ½ÒÆx
-	translateY£¨y£©y·½ÏòÆ½ÒÆy
-	translateZ£¨z£©z·½ÏòÆ½ÒÆz
+	translateï¼ˆ10px,20pxï¼‰xæ–¹å‘å¹³ç§»10pxï¼Œyæ–¹å‘å¹³ç§»20px
+	translate3dï¼ˆxï¼Œyï¼Œzï¼‰
+	translateXï¼ˆxï¼‰xæ–¹å‘å¹³ç§»x
+	translateYï¼ˆyï¼‰yæ–¹å‘å¹³ç§»y
+	translateZï¼ˆzï¼‰zæ–¹å‘å¹³ç§»z
 
-transition£¨a£¬b£¬c£¬d£© ¹ı¶ÉĞ§¹û a=cssÊôĞÔ b=Ê±¼ä c=Ê±¼äÇúÏß d=ÑÓÊ±Ê±¼ä
+transitionï¼ˆaï¼Œbï¼Œcï¼Œdï¼‰ è¿‡æ¸¡æ•ˆæœ a=csså±æ€§ b=æ—¶é—´ c=æ—¶é—´æ›²çº¿ d=å»¶æ—¶æ—¶é—´
 
-¡¶-----------------------¶¯»­---------------------------------¡·
+ã€Š-----------------------åŠ¨ç”»---------------------------------ã€‹
 div{
 	animation: myfirst 5s;
 }
@@ -21,6 +21,6 @@ div{
 	to {background: yellow;}
 }
 
-¡¶-----------------------¶¯»­---------------------------------¡·
+ã€Š-----------------------åŠ¨ç”»---------------------------------ã€‹
 
-http://bennettfeely.com/clippy/ ĞÂÊôĞÔ
+http://bennettfeely.com/clippy/ æ–°å±æ€§

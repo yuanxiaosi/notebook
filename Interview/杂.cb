@@ -1,0 +1,38 @@
+### html
+
+1.video 视频
+
+2.audio 音频
+
+3.drag和drog 拖放
+
+4.canvas 画布
+
+5.svg 内联
+
+6.getCurrentPosition 获取地理位置
+
+7.localStorage 和 sessionStorage
+  loaclStorage 永久保存 大小5M
+  sessionStorage 代替cookie，关闭浏览器消失, 大小5M
+  cookie 可以设置有效时间，大小4kb，请求的时候会夹带在头部
+
+8.manifest 离线缓存
+
+9.Web Worker？
+  当在 HTML 页面中执行脚本时，页面的状态是不可响应的，直到脚本已完成。
+  web worker 是运行在后台的 JavaScript，独立于其他脚本，不会影响页面的性能。您可以继续做任何愿意做的事情：点击、选取内容等等，而此时 web worker 在后台运行。
+
+10.eventSource 服务器事件推送
+
+
+
+### amd 和 cmd
+本质都是异步加载！并没有太大区别
+amd代表requirejs，偏向浏览器端
+cmd代表seajs，    也作用于node服务端
+requirejs偏向于先把依赖前置，先加载require依赖再执行逻辑
+seajs 偏向于按顺序执行，类似同步
+
+
+
