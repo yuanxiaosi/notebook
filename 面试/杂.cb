@@ -1,4 +1,11 @@
 {}
+//-------------------------------------------------------
+#随机数生成
+function getRandom(min, max){
+  return Math.round(Math.random()*(max-min));
+}
+
+
 // ------------------------------------------------------------
 #jquerty插件编写
 $(document).ready(function(){
