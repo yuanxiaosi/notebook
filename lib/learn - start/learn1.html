@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Document</title>
+  <style>
+    *{padding: 0; margin: 0;}
+    .box{
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      top: 0;
+      width: 900px;
+      height: 800px;
+      margin: auto;
+      border: 1px solid #ccc;
+    }
+    .box div{
+      width: 100px;
+      height: 100px;
+      background: #f00;
+      margin-top: 40px;
+    }
+  </style>
+</head>
+<body>
+  
+  <div class="box">
+    <div class="block1"></div>
+    <div class="block2"></div>
+    <div class="block3"></div>
+  </div>
+  
+
+
+  <script src="./js/jquery.js"></script>
+  <script src="./js/bezier.js"></script>
+  <script>
+    
+    function animateJs(){
+      var block = document.querySelector(".block2");
+
+      var start = 0;
+      var end = 611;
+      var deration = 2000;
+
+      var startTime = (+new Date())
+      var endTime = startTime + deration;
+
+      var loop = setInterval(function(){
+        var nowTime = (+new Date())
+        var remind = Math.max(endTime - nowTime, 0);
+        var percent = 1-(remind/deration);
+
+        block.style.marginLeft = percent*end+ "px"
+
+        if(percent == 1){
+          clearInterval(loop)
+          return
+        }
+      }, 13)
+    }
+
+    function animateBezier(){
+      var block = document.querySelector(".block3");
+
+      var start = 0;
+      var end = 611;
+      var deration = 2000;
+
+      var startTime = (+new Date())
+      var endTime = startTime + deration;
+
+      var bezier = new Bezier();
+      bezier.UnitBezier(.92,.24,.13,.84)
+
+      var loop = setInterval(function(){
+        var nowTime = (+new Date())
+        var remind = Math.max(endTime - nowTime, 0);
+        var percent = 1-(remind/deration);
+
+        block.style.marginLeft = bezier.Solve(percent)*end+ "px"
+
+        if(percent == 1){
+          clearInterval(loop)
+          return
+        }
+      }, 13)
+    }
+    
+    window.onload = function(){
+
+      $(".block1").animate({marginLeft: 611}, 2000, 'linear')
+
+      animateJs()
+
+      animateBezier()
+
+    }
+
+    
+
+  
+
+
+
+  </script>
+</body>
+</html>

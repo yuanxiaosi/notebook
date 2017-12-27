@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
+
+<title></title>
+
+
+
+<style type="text/css">
+* {
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+}
+
+html {
+	-ms-touch-action: none;
+}
+
+body,ul,li {
+	padding: 0;
+	margin: 0;
+	border: 0;
+}
+
+body {
+	font-size: 12px;
+	font-family: ubuntu, helvetica, arial;
+	overflow: hidden; /* this is important to prevent the whole page to bounce */
+}
+
+.hide {
+  display: none;
+}
+.warp {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  left: 0;
+  top: 0;
+  background: #000;
+  opacity: 0.3;
+}
+.sure {
+  width: 80px;
+  height: 50px;
+  line-height: 50px;
+  float: right;
+  text-align: center;
+}	
+.cancel {
+  width: 80px;
+  height: 50px;
+  line-height: 50px;
+  float: left;
+  text-align: center;
+}
+.btn {
+  position: absolute;
+  left: 0;
+  bottom: 250px;
+  width: 100%;
+  height: 50px;
+  border-bottom: 1px solid #e5e5e5;
+  background: #fff;
+  color: #316ccb;
+}
+.box {
+  width: 100%;
+  height: 50px;
+  position: absolute;
+  left: 0;
+  top: 100px;
+  border-top: 1px solid #e5e5e5;
+  border-bottom: 1px solid #e5e5e5;
+  z-index: 9;
+}
+.scroller {
+  width: 100%;
+  position: absolute;
+  z-index: 1;
+  -webkit-tap-highlight-color: rgba(0,0,0,0);
+  -webkit-transform: translateZ(0);
+  -moz-transform: translateZ(0);
+  -ms-transform: translateZ(0);
+  -o-transform: translateZ(0);
+  transform: translateZ(0);
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  -webkit-text-size-adjust: none;
+  -moz-text-size-adjust: none;
+  -ms-text-size-adjust: none;
+  -o-text-size-adjust: none;
+  text-size-adjust: none;
+}
+.list {
+	position: absolute;
+	z-index: 1;
+	width: 33%;
+	height: 100%;
+	top: 0;
+	overflow: hidden;
+}
+
+.scroller ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  width: 100%;
+  text-align: left;
+}
+
+.scroller li {
+  height: 50px;
+  line-height: 50px;
+  font-size: 16px;
+  box-sizing: border-box;
+  text-align: center;
+  color: #ccc;
+}
+
+.list:nth-child(1){
+  left: 0;
+}
+.list:nth-child(2){
+  left: 33%;
+}
+.list:nth-child(3){
+  left: 66%;
+}
+	
+.m-select {
+  width: 100%;
+  height: 100vh;
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+
+.body {
+  background: #fff;
+  width: 100%;
+  height: 250px;
+  position: absolute;
+  left: 0;
+  bottom: 0;
+}
+
+
+
+
+
+</style>
+</head>
+<body>
+
+		<div id="main"></div>
+
+		<script src="./react.js"></script>
+		<script src="./react-dom.js"></script>
+    <script src="./browser.min.js"></script>
+    <script type="text/javascript" src="./select-iscroll.js"></script>
+    <script type="text/babel">
+
+      var App = React.createClass({
+        getInitialState: function(){
+          return {
+            show: true,
+            pro: [0,1,2,3,4,5,6,7,8,9],
+            city: [],
+            reg: [],
+            proScroll: '',
+            cityScroll: '',
+            regScroll: ''
+          }
+        },
+        componentWillMount: function(){
+
+        },
+        componentDidMount: function(){
+          var me = this;
+          me.setState({
+            proScroll: new IScroll('#pro', me.getCity),
+            cityScroll: new IScroll('#city', me.getReg),
+            regScroll: new IScroll('#reg')
+          }, function(){
+            document.addEventListener('touchmove', function (e) { e.preventDefault(); }, false);
+            me.getPro();
+          })
+          
+        },
+        cancel: function(){
+          this.setState({show: false})
+        },
+        sure: function(){
+          this.getResult();
+          this.setState({show: false})
+        },
+        getResult: function(){
+          console.log(this.state.proScroll.getIndex())
+          console.log(this.state.cityScroll.getIndex())
+          console.log(this.state.regScroll.getIndex())
+        },
+        getPro: function(){
+          var me = this;
+          //ajax
+          var pro = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
+          //ajax
+          this.setState({pro: pro}, function(){ 
+            me.state.proScroll.init(); //数据改变要初始化插件
+            me.state.proScroll.setIndex(7);
+          });
+          this.getCity();
+        },
+        getCity: function(){
+          var me = this;
+          var proIndex = this.state.proScroll.getIndex();
+          //ajax
+          var city = [];
+          for(var i=0; i<50; i++){
+            city.push(proIndex+"city"+i)
+          }
+          //ajax
+          this.setState({city: city}, function(){
+            me.state.cityScroll.init(); //数据改变要初始化插件
+            me.state.cityScroll.setIndex(8);
+          })
+          this.getReg();
+        },
+        getReg: function(){
+          var me = this;
+          var cityIndex = this.state.cityScroll.getIndex();
+          //ajax
+          var reg = [];
+          for(var i=0; i<50; i++){
+            reg.push(cityIndex+"reg"+i)
+          }
+          //ajax
+          this.setState({reg: reg}, function(){
+            me.state.regScroll.init(); //数据改变要初始化插件
+            me.state.regScroll.setIndex(9);
+          });
+        },
+        render: function () {
+          var me = this;
+          var show = me.state.show;
+          var pro = me.state.pro;
+          var city = me.state.city;
+          var reg = me.state.reg;
+          var proLiDiv = pro.map(function(v, k){
+            return(
+              <li key={k}>{v}</li>
+            )
+          })
+          var cityLiDiv = city.map(function(v, k){
+            return(
+              <li key={k}>{v}</li>
+            )
+          })
+          var regLiDiv = reg.map(function(v, k){
+            return(
+              <li key={k}>{v}</li>
+            )
+          })
+          return (
+            <div className={show?"m-select":"m-select hide"}>
+              <div className="warp"></div>
+              <div className="btn">
+                <div className="cancel" onClick={this.cancel}>取消</div>
+                <div className="sure" onClick={this.sure}>确定</div>
+              </div>
+              <div className="body">
+                <div className="list" id="pro">
+                  <div className="box"></div>
+                  <div className="scroller">
+                    <ul>
+                      <li></li>
+                      <li></li>
+                      {proLiDiv}
+                      <li></li>
+                      <li></li>
+                    </ul>
+                  </div>
+                </div>
+                <div className="list" id="city">
+                  <div className="box"></div>
+                  <div className="scroller">
+                    <ul>
+                      <li></li>
+                      <li></li>
+                      {cityLiDiv}
+                      <li></li>
+                      <li></li>
+                    </ul>
+                  </div>
+                </div>
+                <div className="list" id="reg">
+                  <div className="box"></div>
+                  <div className="scroller">
+                    <ul>
+                      <li></li>
+                      <li></li>
+                      {regLiDiv}
+                      <li></li>
+                      <li></li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )
+        }
+      });
+
+      ReactDOM.render(<App />, document.getElementById("main"));
+
+      document.addEventListener('touchmove', function (e) { e.preventDefault(); }, false);
+
+
+
+    </script>
+
+</body>
+
+
+
+
+
+</html>
